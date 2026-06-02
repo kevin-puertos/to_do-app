@@ -24,3 +24,4 @@ API REST desarrollada con Spring Boot.
 - JWT Authentication
 - Roles y permisos
 - Docker
+- Documentar con Swagger/OpenAPI.
