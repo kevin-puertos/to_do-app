@@ -1,4 +1,4 @@
-# Todo API
+# ToDo API
 
 API REST desarrollada con Spring Boot.
 
@@ -9,18 +9,18 @@ API REST desarrollada con Spring Boot.
 - Spring Data JPA
 - PostgreSQL
 - MapStruct
+- Maven
 
 ## Funcionalidades
 
 - Crear tareas
-- Listar tareas
+- Obtener tareas
 - Actualizar tareas
 - Eliminar tareas
 
-## Ejecutar
+## Próximas mejoras
 
-1. Crear base de datos PostgreSQL
-2. Configurar application.properties
-3. Ejecutar:
-
-./mvnw spring-boot:run
+- Spring Security
+- JWT Authentication
+- Roles y permisos
+- Docker
