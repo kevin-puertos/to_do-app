@@ -36,6 +36,11 @@ public class UserService implements  IUserService{
     }
 
     @Override
+    public void userExistUsername(String username) {
+        User userAux = userRepository.findByUsername(username).orElseThrow( () -> new ResourceAlreadyExistException("Username Already Exist"));
+    }
+
+    @Override
     public User findUser(Long id) {
 
         return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User not found"));
@@ -51,6 +56,7 @@ public class UserService implements  IUserService{
     @Override
     public ViewUserDto createUser(CreateUserDto newUserDto) {
 
+        this.userExistUsername(newUserDto.username());
 
 
         User userAux = userMapper.userDtoToUser(newUserDto);
@@ -92,6 +98,7 @@ public class UserService implements  IUserService{
     @Override
     public ViewUserDto updateUser(Long id, UpdateUserDto newUserData) {
         User userAux= this.findUser(id);
+        this.userExistUsername(newUserData.username());
 
         if(newUserData.username() != null){
             userAux.setUsername(newUserData.username());

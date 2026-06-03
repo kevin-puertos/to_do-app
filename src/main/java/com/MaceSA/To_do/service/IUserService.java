@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface IUserService {
      void userExist(Long id);
+     void userExistUsername(String username);
      User findUser(Long id);
      void saveUser(User user);
      ViewUserDto createUser(CreateUserDto newUser);

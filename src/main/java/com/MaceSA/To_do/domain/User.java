@@ -18,11 +18,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private  Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String username;
 
     @Column(nullable = false)
     private  String password;
+
+    @Column(name = "rol")
+    private UserRoles rol;
 
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
