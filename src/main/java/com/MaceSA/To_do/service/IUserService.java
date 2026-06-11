@@ -9,6 +9,7 @@ public interface IUserService {
      void userExist(Long id);
      void userExistUsername(String username);
      User findUser(Long id);
+     User findUserByUsername(String username);
      void saveUser(User user);
      ViewUserDto createUser(CreateUserDto newUser);
      void deleteUser(Long id);

@@ -12,7 +12,6 @@ import java.util.Optional;
 public interface IUserRepository extends JpaRepository<User,Long > {
     @Query("SELECT u FROM User u LEFT JOIN FETCH u.userTasks")
     List<User> userWithTask();
-
     Optional<User> findByUsername(String username);
 
 

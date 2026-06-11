@@ -46,6 +46,12 @@ public class UserService implements  IUserService{
         return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User not found"));
     }
 
+    @Override
+    public User findUserByUsername(String username) {
+        User userAux = userRepository.findByUsername(username).orElseThrow( () -> new ResourceAlreadyExistException("Username Already Exist"));
+        return userAux;
+    }
+
     @Transactional
     @Override
     public void saveUser(User user) {
