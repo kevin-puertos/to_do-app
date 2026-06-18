@@ -5,13 +5,13 @@ import com.MaceSA.To_do.dto.*;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IAdminService {
      void userExist(Long id);
-     void userExistUsername(String username);
+     void validateUsernameNotExists(String username);
      User findUser(Long id);
      User findUserByUsername(String username);
      void saveUser(User user);
-     ViewUserDto createUser(CreateUserDto newUser);
+     void createUser(CreateUserDto newUser);
      void deleteUser(Long id);
      ViewUserDto viewUser(Long id);
      List<ViewUserDto> viewAllUsers();

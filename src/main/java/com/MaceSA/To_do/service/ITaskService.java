@@ -8,9 +8,9 @@ import com.MaceSA.To_do.dto.ViewTaskDto;
 import java.util.List;
 
 public interface ITaskService {
-    ViewTaskDto createUserTask(Long idUser, CreateTaskDto newTask);
+    ViewTaskDto createUserTask(String username, CreateTaskDto newTask);
     Task findTask(Long id);
-    List<ViewTaskDto> viewAllTaskUser(Long idUser);
-    void deleteTaskUser(Long idUser, Long idTask);
-    ViewTaskDto updateTask(Long idUser, Long idTask, UpdateTaskDto newTaskData);
+    List<ViewTaskDto> viewAllTaskUser(String username);
+    void deleteTaskUser(String username, Long idTask);
+    ViewTaskDto updateTask(String username, Long idTask, UpdateTaskDto newTaskData);
 }

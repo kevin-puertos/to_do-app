@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class) //Activa Mockito en Junit5
-public class UserServiceTest {
+public class AdminServiceTest {
 
     //Crea un mock sin tocar la base de datos real
     @Mock
@@ -42,7 +42,7 @@ public class UserServiceTest {
     private ITaskMapper taskMapper;
 
     @InjectMocks //Crea el service e inyecta los mocks
-    private  UserService userService;
+    private AdminService adminService;
     //Esto es igual a:  new UserService(userMapper, userRepository)
 
 
@@ -56,7 +56,7 @@ public class UserServiceTest {
         user.setPassword(passwordEncoder.encode("Mace.1234"));
 
         // Act (ejecutar)
-        userService.saveUser(user);
+        adminService.saveUser(user);
 
         // Assert (verificar)
         verify(userRepository).save(user);
@@ -89,7 +89,7 @@ public class UserServiceTest {
 
         // -------- Act --------
         // Ejecuta el método real
-        ViewUserDto result = userService.createUser(inputDto);
+        ViewUserDto result = adminService.createUser(inputDto);
 
 
         // -------- Assert --------
@@ -119,7 +119,7 @@ public class UserServiceTest {
         when(userMapper.userToViewUser(user)).thenReturn(outPut);
 
         // -------- Act --------
-        ViewUserDto result = userService.viewUser(1L);
+        ViewUserDto result = adminService.viewUser(1L);
 
 
         // -------- Assert --------
@@ -139,7 +139,7 @@ public class UserServiceTest {
 
 
         // -------- Act --------
-        userService.deleteUser(1L);
+        adminService.deleteUser(1L);
 
 
         // -------- Assert --------
@@ -157,7 +157,7 @@ public class UserServiceTest {
 
         // -------- Act --------
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            userService.deleteUser(2L);
+            adminService.deleteUser(2L);
         });
 
         // -------- Assert --------
@@ -197,7 +197,7 @@ public class UserServiceTest {
         when(userMapper.userToViewUser(user2)).thenReturn(user2Dto);
 
         // -------- Act --------
-        List<ViewUserDto> viewUserDtosList = userService.viewAllUsers();
+        List<ViewUserDto> viewUserDtosList = adminService.viewAllUsers();
 
         // -------- Assert --------
         assertEquals(2,viewUserDtosList.size());
@@ -223,7 +223,7 @@ public class UserServiceTest {
         when(userMapper.userToViewUser(userAux)).thenReturn(viewUserDto);
 
         // -------- Act -------
-        ViewUserDto result=  userService.updateUser(1L,newDataUser);
+        ViewUserDto result=  adminService.updateUser(1L,newDataUser);
 
         // -------- Assert --------
         assertEquals("Mace",result.username());
@@ -238,7 +238,7 @@ public class UserServiceTest {
         User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         // -------- Act -------
-        userService.findUser(1L);
+        adminService.findUser(1L);
 
         // -------- Assert --------
         verify(userRepository).findById(1L);
@@ -252,7 +252,7 @@ public class UserServiceTest {
 
         // -------- Assert --------
         assertThrows(ResourceAlreadyExistException.class, () ->{
-            userService.userExist(1L);
+            adminService.userExist(1L);
         });
 
         verify(userRepository).findById(1L);

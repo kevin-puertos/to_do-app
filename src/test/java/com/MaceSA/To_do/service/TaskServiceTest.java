@@ -35,7 +35,7 @@ public class TaskServiceTest {
     private ITaskRespository taskRespository;
 
     @Mock
-    private IUserService userService;
+    private IAdminService userService;
 
 
     @InjectMocks

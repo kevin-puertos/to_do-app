@@ -23,12 +23,12 @@ import java.util.Objects;
 public class TaskService implements ITaskService {
     private final ITaskMapper taskMapper;
     private final ITaskRespository taskRespository;
-    private final IUserService userService;
+    private final IAdminService userService;
 
     @Transactional
     @Override
-    public ViewTaskDto createUserTask(Long idUser, CreateTaskDto newTask) {
-        User userAux = userService.findUser(idUser);
+    public ViewTaskDto createUserTask(String username, CreateTaskDto newTask) {
+        User userAux = userService.findUserByUsername(username);
 
 
         Task taskAux = taskMapper.newTaskDtoToTask(newTask);
@@ -45,8 +45,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<ViewTaskDto> viewAllTaskUser(Long idUser) {
-        User userAux = userService.findUser(idUser);
+    public List<ViewTaskDto> viewAllTaskUser(String username) {
+        User userAux = userService.findUserByUsername(username);
 
         List<Task> userTask = taskRespository.viewAllUserTask(userAux.getId());
 
@@ -60,8 +60,8 @@ public class TaskService implements ITaskService {
 
     @Transactional
     @Override
-    public void deleteTaskUser(Long idUser, Long idTask) {
-        User userAux = userService.findUser(idUser);
+    public void deleteTaskUser(String username, Long idTask) {
+        User userAux = userService.findUserByUsername(username);
 
         List<Task> taskAux = taskRespository.viewAllUserTask(userAux.getId());
 
@@ -79,8 +79,8 @@ public class TaskService implements ITaskService {
 
     @Transactional
     @Override
-    public ViewTaskDto updateTask(Long idUser, Long idTask, UpdateTaskDto newTaskData) {
-        User userAux = userService.findUser(idUser);
+    public ViewTaskDto updateTask(String username, Long idTask, UpdateTaskDto newTaskData) {
+        User userAux = userService.findUserByUsername(username);
 
         Task taskAux = this.findTask(idTask);
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements  IUserService{
+public class AdminService implements IAdminService {
 
     private  final PasswordEncoder passwordEncoder;
     private final IUserMapper userMapper;
@@ -36,20 +36,20 @@ public class UserService implements  IUserService{
     }
 
     @Override
-    public void userExistUsername(String username) {
-        User userAux = userRepository.findByUsername(username).orElseThrow( () -> new ResourceAlreadyExistException("Username Already Exist"));
+    public void validateUsernameNotExists(String username) {
+        if( userRepository.findByUsername(username).isPresent()){
+           throw  new ResourceAlreadyExistException("Username Already Exist");
+        }
     }
 
     @Override
     public User findUser(Long id) {
-
         return userRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("User not found"));
     }
 
     @Override
     public User findUserByUsername(String username) {
-        User userAux = userRepository.findByUsername(username).orElseThrow( () -> new ResourceAlreadyExistException("Username Already Exist"));
-        return userAux;
+        return userRepository.findByUsername(username).orElseThrow( () -> new ResourceAlreadyExistException("Username Already Exist"));
     }
 
     @Transactional
@@ -60,17 +60,15 @@ public class UserService implements  IUserService{
 
     @Transactional
     @Override
-    public ViewUserDto createUser(CreateUserDto newUserDto) {
+    public void createUser(CreateUserDto newUserDto) {
 
-        this.userExistUsername(newUserDto.username());
+        this.validateUsernameNotExists(newUserDto.username());
 
 
         User userAux = userMapper.userDtoToUser(newUserDto);
         userAux.setPassword(passwordEncoder.encode(userAux.getPassword()));
 
         userRepository.save(userAux);
-
-        return userMapper.userToViewUser(userAux);
     }
     @Transactional
     @Override
@@ -104,7 +102,7 @@ public class UserService implements  IUserService{
     @Override
     public ViewUserDto updateUser(Long id, UpdateUserDto newUserData) {
         User userAux= this.findUser(id);
-        this.userExistUsername(newUserData.username());
+        this.validateUsernameNotExists(newUserData.username());
 
         if(newUserData.username() != null){
             userAux.setUsername(newUserData.username());

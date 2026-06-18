@@ -1,22 +1,20 @@
 package com.MaceSA.To_do.service;
 
 import com.MaceSA.To_do.domain.User;
-import com.MaceSA.To_do.dto.LoginDto;
 import com.MaceSA.To_do.exceptions.ResourceNotFoundException;
 import com.MaceSA.To_do.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserDetailsService implements IUserDetailsService {
+public class UserDetailsServiceImpl implements IUserDetailsServiceImpl {
     private final IUserRepository userRepository;
 
     @Override
-    public UserDetails loadByUsername(String username) {
+    public UserDetails loadUserByUsername(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Usuario no encontrado"));
@@ -25,7 +23,7 @@ public class UserDetailsService implements IUserDetailsService {
                 .builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRol().name())
+                .authorities( new SimpleGrantedAuthority("ROLE_"+user.getRol().name()))
                 .build();
     }
 }
