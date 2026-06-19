@@ -33,8 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authHeader.substring(7);// Marcamos donde empieza el token y lo extraemos a partir de ahi( Bearer_ = 7)
-        String username = jwtService.extractAllClaims(token).getSubject();
+        String token = authHeader.substring(7);
+            String username = jwtService.extractAllClaims(token).getSubject();
 
         if (username != null && SecurityContextHolder
                 .getContext()

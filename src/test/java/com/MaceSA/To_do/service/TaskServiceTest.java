@@ -3,6 +3,7 @@ package com.MaceSA.To_do.service;
 import com.MaceSA.To_do.domain.Task;
 import com.MaceSA.To_do.domain.TaskStatus;
 import com.MaceSA.To_do.domain.User;
+import com.MaceSA.To_do.domain.UserRoles;
 import com.MaceSA.To_do.dto.CreateTaskDto;
 import com.MaceSA.To_do.dto.UpdateTaskDto;
 import com.MaceSA.To_do.dto.ViewTaskDto;
@@ -81,10 +82,12 @@ public class TaskServiceTest {
         // -------- Arrange --------
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         CreateTaskDto createTaskDto = new CreateTaskDto("Test",
-                TaskStatus.TO_DO,"This is a test",
+                "TO_DO","This is a test",
                 LocalDate.of(2027,3,1));
 
         Task task = new Task(1L,"Test",
@@ -105,7 +108,7 @@ public class TaskServiceTest {
         when(taskMapper.taskToViewTaskDto(task)).thenReturn(viewTaskDto);
 
         // --------   Act   --------
-        ViewTaskDto result = taskService.createUserTask(1L,createTaskDto);
+        ViewTaskDto result = taskService.createUserTask("kevin",createTaskDto);
 
         // -------- Assert  --------
         assertNotNull(result);
@@ -125,6 +128,8 @@ public class TaskServiceTest {
         // -------- Arrange --------
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         List<Task> userTask = new ArrayList<>();
@@ -167,7 +172,7 @@ public class TaskServiceTest {
         when(taskMapper.taskToViewTaskDto(task2)).thenReturn(viewTaskDto2);
 
         // --------   Act   --------
-        List<ViewTaskDto> result = taskService.viewAllTaskUser(1L);
+        List<ViewTaskDto> result = taskService.viewAllTaskUser("kevin");
 
         // -------- Assert  --------
         assertEquals("Test",result.get(0).taskName());
@@ -185,6 +190,8 @@ public class TaskServiceTest {
         // -------- Arrange --------
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         Task task = new Task(1L,"Test",
@@ -207,7 +214,7 @@ public class TaskServiceTest {
         when(taskRespository.viewAllUserTask(1L)).thenReturn(userTasks);
 
         // --------   Act   --------
-        taskService.deleteTaskUser(1L,2L);
+        taskService.deleteTaskUser("kevin",2L);
 
         // -------- Assert  --------
         verify(taskRespository).delete(task2);
@@ -217,6 +224,8 @@ public class TaskServiceTest {
     void shouldRiseResourceNotFoundExceptionDeleteTask(){
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         when(userService.findUser(anyLong())).thenReturn(user);
@@ -225,7 +234,7 @@ public class TaskServiceTest {
         // --------   Act   --------
 
         ResourceNotFoundException result = assertThrows(ResourceNotFoundException.class,() ->{
-            taskService.deleteTaskUser(anyLong(),anyLong());
+            taskService.deleteTaskUser(anyString(),anyLong());
         });
 
         // -------- Assert  --------
@@ -243,6 +252,8 @@ public class TaskServiceTest {
         // -------- Arrange --------
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         UpdateTaskDto newDataTask = new UpdateTaskDto(
@@ -273,7 +284,7 @@ public class TaskServiceTest {
         when(taskMapper.taskToViewTaskDto(taskAux)).thenReturn(viewTaskDto);
         // --------   Act   --------
 
-        ViewTaskDto result =  taskService.updateTask(1L,1L,newDataTask);
+        ViewTaskDto result =  taskService.updateTask("kevin",1L,newDataTask);
 
 
         // -------- Assert  --------
@@ -301,6 +312,8 @@ public class TaskServiceTest {
 
         User user = new User(1L,
                 "kevin",
+                "Password",
+                UserRoles.COMMON,
                 Set.of());
 
         UpdateTaskDto newDataTask = new UpdateTaskDto(
@@ -311,6 +324,8 @@ public class TaskServiceTest {
 
         User user2 = new User(2L,
                 "Mace",
+                "password",
+                UserRoles.COMMON,
                 Set.of());
 
 
@@ -331,7 +346,7 @@ public class TaskServiceTest {
         // --------   Act   --------
 
         ResourceNotFoundException result = assertThrows(ResourceNotFoundException.class,()->{
-            taskService.updateTask(1L,1L,newDataTask);
+            taskService.updateTask("kevin",1L,newDataTask);
         });
 
         // -------- Assert  --------

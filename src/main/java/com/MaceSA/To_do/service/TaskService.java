@@ -87,7 +87,7 @@ public class TaskService implements ITaskService {
         if(!taskAux.getUser().equals(userAux)){
             throw new ResourceNotFoundException("Task not found");
         }
-
+        
         if(newTaskData.taskName() != null){
             taskAux.setTaskName(newTaskData.taskName());
         }

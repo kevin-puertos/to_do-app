@@ -3,6 +3,7 @@ package com.MaceSA.To_do.service;
 import com.MaceSA.To_do.domain.Task;
 import com.MaceSA.To_do.domain.TaskStatus;
 import com.MaceSA.To_do.domain.User;
+import com.MaceSA.To_do.domain.UserRoles;
 import com.MaceSA.To_do.dto.CreateUserDto;
 import com.MaceSA.To_do.dto.UpdateUserDto;
 import com.MaceSA.To_do.dto.ViewTaskDto;
@@ -67,7 +68,7 @@ public class AdminServiceTest {
         // -------- Arrange --------
 
         //Creo el Dto inicial, que llegaria al service
-        CreateUserDto inputDto = new CreateUserDto("Kevin","Mace1234");
+        CreateUserDto inputDto = new CreateUserDto("Kevin","Admin","Mace1234");
 
         //Creo el usuario que el mapper debeeria crear
         User user = new User();
@@ -75,7 +76,7 @@ public class AdminServiceTest {
         user.setPassword(passwordEncoder.encode(passwordEncoder.encode(inputDto.password())));
 
         //Creo el Resultado esperado
-        ViewUserDto outputDto = new ViewUserDto(1L,"Kevin", List.of());
+        ViewUserDto outputDto = new ViewUserDto(1L,"Kevin", UserRoles.ADMIN, List.of());
 
         //Simulamos el comportamiento del mapper
         //Cuando alguien llame al método del mapper que devuelva el user
@@ -89,15 +90,10 @@ public class AdminServiceTest {
 
         // -------- Act --------
         // Ejecuta el método real
-        ViewUserDto result = adminService.createUser(inputDto);
+        adminService.createUser(inputDto);
 
 
         // -------- Assert --------
-
-        // 1. Validar resultado
-        assertEquals("Kevin",result.username());
-
-
         // 2. Verificar interacciones
         //Verificamos que se llamó al método del mapper
         verify(userMapper).userDtoToUser(inputDto);
@@ -110,9 +106,9 @@ public class AdminServiceTest {
     @Test
     void shouldViewUser(){
         // -------- Arrange --------
-        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
 
-        ViewUserDto outPut = new ViewUserDto(1L,"Kevin", List.of());
+        ViewUserDto outPut = new ViewUserDto(1L,"Kevin",UserRoles.ADMIN, List.of());
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -132,7 +128,7 @@ public class AdminServiceTest {
     @Test
     void shouldDeleteUser(){
         // -------- Arrange --------
-        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
 
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -172,9 +168,9 @@ public class AdminServiceTest {
         Task tk1 = new Task("prueba1","Esto es una prueba",LocalDate.of(2042,10,2),TaskStatus.TO_DO);
         Task tk2 = new Task("Casa","Ahorrar para una casa",LocalDate.of(2031,10,2),TaskStatus.IN_PROGRESS);
 
-        User user1 = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User user1 = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
 
-        User user2= new User(2L,"Mace",passwordEncoder.encode("User2.1234"),Set.of());
+        User user2= new User(2L,"Mace",passwordEncoder.encode("User2.1234"),UserRoles.ADMIN,Set.of());
 
         List<User> userList = List.of(user1,user2);
 
@@ -183,8 +179,8 @@ public class AdminServiceTest {
         ViewTaskDto tk2Dto = new ViewTaskDto(1L,"Casa",TaskStatus.IN_PROGRESS,"Ahorrar para una casa",LocalDate.of(2026,4,22),LocalDate.of(2031, 10 ,2));
 
 
-        ViewUserDto user1Dto = new ViewUserDto(1L,"Kevin",List.of(tk1Dto,tk2Dto));
-        ViewUserDto user2Dto = new ViewUserDto(2L,"Mace",List.of());
+        ViewUserDto user1Dto = new ViewUserDto(1L,"Kevin",UserRoles.ADMIN,List.of(tk1Dto,tk2Dto));
+        ViewUserDto user2Dto = new ViewUserDto(2L,"Mace",UserRoles.ADMIN,List.of());
 
 
         List<ViewUserDto> userDtos = List.of(user1Dto,user2Dto);
@@ -213,11 +209,11 @@ public class AdminServiceTest {
     void shouldUpdateUser() {
         // -------- Arrange --------
 
-        User userAux = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User userAux = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
 
         UpdateUserDto newDataUser = new UpdateUserDto("Mace","NewPassword1.23");
 
-        ViewUserDto viewUserDto = new ViewUserDto(1L, "Mace", List.of());
+        ViewUserDto viewUserDto = new ViewUserDto(1L, "Mace",UserRoles.ADMIN, List.of());
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(userAux));
         when(userMapper.userToViewUser(userAux)).thenReturn(viewUserDto);
@@ -235,7 +231,7 @@ public class AdminServiceTest {
     @Test
     void shouldFindUser(){
         // -------- Arrange --------
-        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         // -------- Act -------
         adminService.findUser(1L);
@@ -246,7 +242,7 @@ public class AdminServiceTest {
     @Test
     void shouldUserExist(){
         // -------- Arrange --------
-        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"), Set.of());
+        User user = new User(1L,"Kevin", passwordEncoder.encode("Mace.1234"),UserRoles.ADMIN, Set.of());
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         // -------- Act -------
 
